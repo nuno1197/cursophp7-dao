@@ -66,13 +66,10 @@ class Users{
 		if(count($result)>0){
 
 			//so tem uma linha
-			$row = $result[0];
+			//$row = $result[0];
+			$this->setData($results[0]);			
 
-			$this->setIduser($row['iduser']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			//Por o formato de hora direito
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+			
 		}
 
 	}
@@ -108,18 +105,61 @@ class Users{
 		if(count($result)>0){
 
 			//so tem uma linha
-			$row = $result[0];
+			//$row = $result[0];
 
-			$this->setIduser($row['iduser']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			//Por o formato de hora direito
-			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+			$this->setData($results[0]);
 		} else {
 
 			throw new Exception("Login e/ou senha invalidos.");
 			
 		}
+	}
+
+
+	public function setData($data){
+
+			$this->setIduser($data['iduser']);
+			$this->setDeslogin($data['deslogin']);
+			$this->setDessenha($data['dessenha']);
+			//Por o formato de hora direito
+			$this->setDtcadastro(new DateTime($data['dtcadastro']));
+
+	}
+
+	public function insert(){
+
+		$sql = new Sql();
+
+		$results=$sql->select("CALL sp_users_insert(:LOGIN, :PASSWORD)", array(
+
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha()
+		));
+
+		if(count ($results)>0){
+			$this->setData($results[0]);
+		}
+	}
+
+	public function update($login, $password){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_users SET deslogin = :LOGIN, dessenha = :PASSWORD  WHERE iduser= :ID", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIduser()
+		));
+	}
+
+	public function __construct($login="" , $password=""){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
 	}
 
 	public function __toString(){

@@ -33,8 +33,25 @@ echo json_encode($users);
 
 //carrega um user usando o login e a passe
 
-$usuario = new Users();
-$usuario->login("root","teste");
+//$usuario = new Users();
+//$usuario->login("root","teste");
 
-echo $usuario;
+//echo $usuario;
+
+//criando um novo user
+//$aluno = new Users("aluno","matematica" );
+
+//$aluno->setDeslogin("Maria");
+//$aluno->setDessenha("matematica");
+
+//$aluno->insert();
+
+//echo $aluno;
+
+$user= new Users();
+
+$user->loadById(3);
+
+$user->update("prof","portugues");
+echo $user;
  ?>
