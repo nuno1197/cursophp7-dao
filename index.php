@@ -48,10 +48,18 @@ echo json_encode($users);
 
 //echo $aluno;
 
-$user= new Users();
+//alterar user
+//$user= new Users();
 
+//$user->loadById(3);
+
+//$user->update("prof","portugues");
+//echo $user;
+
+$user = new Users();
 $user->loadById(3);
 
-$user->update("prof","portugues");
+$user->delete();
+
 echo $user;
  ?>

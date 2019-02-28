@@ -146,7 +146,7 @@ class Users{
 		$this->setDeslogin($login);
 		$this->setDessenha($password);
 
-		
+
 		$sql = new Sql();
 
 		$sql->query("UPDATE tb_users SET deslogin = :LOGIN, dessenha = :PASSWORD  WHERE iduser= :ID", array(
@@ -155,6 +155,24 @@ class Users{
 			':ID'=>$this->getIduser()
 		));
 	}
+
+	public function delete(){
+
+		$sql = new sql();
+
+		$sql->query("DELETE FROM tb_users WHERE iduser= :ID", array(
+
+			':ID'=>$this->getIduser()
+
+		));
+
+		$this->setIduser(0);
+		$this->setDeslogin("");
+		$this->setDessenha("");
+		$this->setDtcadastro(new DateTime());
+	}
+
+
 
 	public function __construct($login="" , $password=""){
 
