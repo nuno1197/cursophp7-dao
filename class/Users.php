@@ -60,9 +60,8 @@ class Users{
 	public function loadById($id){
 
 		$sql= new Sql();
-		$result=$sql->select("SELECT * FROM tb_users WHERE iduser= :id", array(
-			":id"=>$id
-		));
+		$result=$sql->select("SELECT * FROM tb_users WHERE iduser= :id;", array(
+			":id"=>$id));
 
 		if(count($result)>0){
 
@@ -76,6 +75,51 @@ class Users{
 			$this->setDtcadastro(new DateTime($row['dtcadastro']));
 		}
 
+	}
+	
+
+//como nao usamos o this metodo pode ser estatico
+	public static function getList(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_users ORDER BY deslogin;");
+	}
+
+	public static function search($login)
+	{
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_users WHERE deslogin LIKE :SEARCH ORDER BY deslogin" , array(
+
+			":SEARCH"=>"%".$login."%"
+		));
+	}
+
+	public function login($login, $password){
+
+		$sql= new Sql();
+		$result=$sql->select("SELECT * FROM tb_users WHERE deslogin= :LOGIN and dessenha= :PASSWORD;", array(
+			":LOGIN"=>$login,
+			":PASSWORD"=>$password
+
+		));
+
+		if(count($result)>0){
+
+			//so tem uma linha
+			$row = $result[0];
+
+			$this->setIduser($row['iduser']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			//Por o formato de hora direito
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+		} else {
+
+			throw new Exception("Login e/ou senha invalidos.");
+			
+		}
 	}
 
 	public function __toString(){
